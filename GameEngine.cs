@@ -26,7 +26,7 @@ namespace _2D_ADVENTURE_GAME
             Random rnd = new Random();
 
 
-            Level = new Level(rnd.Next(MIN_SIZE, MAX_SIZE + 1), rnd.Next(MIN_SIZE, MAX_SIZE + 1));//genrating a random numbers between max and min value to create a level
+            Level = new Level(rnd.Next(MIN_SIZE, MAX_SIZE + 1), rnd.Next(MIN_SIZE, MAX_SIZE + 1), 4);//genrating a random numbers between max and min value to create a level
 
         }
 
@@ -87,9 +87,10 @@ namespace _2D_ADVENTURE_GAME
         public void NextLevel() // create new level
         {
             currentLevelNumber++; //increase level
-             TempHero = Level.Hero;
+            TempHero = Level.Hero;
             Random rand = new Random(); //randomise
-            Level = new Level(rand.Next(MIN_SIZE, MAX_SIZE + 1), rand.Next(MIN_SIZE, MAX_SIZE + 1), TempHero); 
+      
+            Level = new Level(rand.Next(MIN_SIZE, MAX_SIZE + 1), rand.Next(MIN_SIZE, MAX_SIZE + 1),4, TempHero); 
 
            
         }

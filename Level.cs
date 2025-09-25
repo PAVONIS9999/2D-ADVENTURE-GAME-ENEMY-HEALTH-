@@ -17,6 +17,10 @@ namespace _2D_ADVENTURE_GAME
         //paralled or 2D array
         Tile[,] TileArray;
 
+        private EnemyTile[] enemyTiles;
+
+        public  EnemyTile EnemyTile { get;}
+
 
         //Properties to expose field values
         public int HeiGht
@@ -38,9 +42,10 @@ namespace _2D_ADVENTURE_GAME
         public HeroTile Hero { get;}
         public ExitTile Exit { get; }
 
-        public Level(int Height, int Width, HeroTile hero = null) //constructor
+        public Level(int Height, int Width, int NumOfSpawn, HeroTile hero = null) //constructor
         {
             //initializing fields
+           
             height = Height;
             width = Width;
             //initializing array using height and width values as the arrays dimensions
@@ -64,6 +69,11 @@ namespace _2D_ADVENTURE_GAME
             Position exit = GetRandomEmptyPosition();
             ArrayTile[exit.X, exit.Y] = CreateTile(TileType.Exit, exit);
 
+            enemyTiles = new EnemyTile[NumOfSpawn];
+            Position enemy = GetRandomEmptyPosition();
+       
+            ArrayTile[enemy.X, enemy.Y] = CreateTile(TileType.Enemy, enemy);
+
         }
 
         public enum TileType //enum for tile type 
@@ -71,7 +81,8 @@ namespace _2D_ADVENTURE_GAME
             Empty,
             Wall,
             Hero,
-            Exit
+            Exit,
+            Enemy
 
 
 
@@ -98,9 +109,13 @@ namespace _2D_ADVENTURE_GAME
                  tile = new HeroTile(position); //creating Herotile in position
                     break;
 
-                    case TileType.Exit:
-                       tile = new ExitTile(position);//creating exittile in position
-                    break;
+                case TileType.Exit:
+                  tile = new ExitTile(position);//creating exittile in position
+                break;
+
+                case TileType.Enemy:
+                    tile = new GruntTile(position);//creating grunt enemy in position
+                 break;
 
                
 
@@ -210,6 +225,12 @@ namespace _2D_ADVENTURE_GAME
             Down = 2,
             Left = 3,
             None = 4
+        }
+
+        public void UpdateVision()
+        {
+            Hero.UpdateVision(this);
+            EnemyTile.UpdateVision(this);
         }
     }
 }

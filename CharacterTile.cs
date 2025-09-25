@@ -14,7 +14,7 @@ namespace _2D_ADVENTURE_GAME
         private int maxHitPoints;
         private int attackPower;
 
-        private Tile[] vision;
+        public Tile[] vision;
        
 
         public CharacterTile(Position position, int HitPoints, int AttackPower) : base(position) //inherting from base class
