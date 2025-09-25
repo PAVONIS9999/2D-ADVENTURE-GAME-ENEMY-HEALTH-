@@ -39,7 +39,7 @@ namespace _2D_ADVENTURE_GAME
                 }
             }
            
-            if (emptyCount == 0) 
+            if (emptyCount == 0) //check to see if no empty tiles to move to
             {
                 tile = null;
                 return false;
@@ -67,7 +67,7 @@ namespace _2D_ADVENTURE_GAME
 
         }
 
-        public override CharacterTile[] GetTargets()
+        public override CharacterTile[] GetTargets() //overridden getTarget Method
         {
             int heroCount = 0;
             int targetPosition; 
@@ -91,7 +91,7 @@ namespace _2D_ADVENTURE_GAME
 
             for (int i = 0; i < vision.Length; i++)
             {
-                if (vision[i] is HeroTile hero)
+                if (vision[i] is HeroTile hero) // condition to check if vision array contains hero tile
                 {
                     targets[targetPosition] = hero;
                     targetPosition = targetPosition + 1;

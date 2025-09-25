@@ -13,20 +13,20 @@ namespace _2D_ADVENTURE_GAME
         private HeroTile TempHero;
         private GameState State = GameState.InProgress;
         private int NumberOfLevels;
-
+        private int heroMove = 0;
 
         public int MIN_SIZE = 10;
         public int MAX_SIZE = 20;
         private int currentLevelNumber = 1;
 
-        public GameEngine(int levels) // construvtor which initializes number of levels field
+        public GameEngine(int levels) // constructor which initializes number of levels field.
         {
 
             NumberOfLevels = levels;
             Random rnd = new Random();
 
 
-            Level = new Level(rnd.Next(MIN_SIZE, MAX_SIZE + 1), rnd.Next(MIN_SIZE, MAX_SIZE + 1), 4);//genrating a random numbers between max and min value to create a level
+            Level = new Level(rnd.Next(MIN_SIZE, MAX_SIZE + 1), rnd.Next(MIN_SIZE, MAX_SIZE + 1), currentLevelNumber);//genrating a random numbers between max and min value to create a level
 
         }
 
@@ -67,7 +67,7 @@ namespace _2D_ADVENTURE_GAME
             if (targetTile is EmptyTile)
             {
                 Level.SwopTiles(hero, targetTile);
-                hero.UpdateVision(Level);
+                Level.UpdateVision(); // updated UpdateVison method to call the level vision method instead of the heros method
                 return true;
             }
             return false;
@@ -77,6 +77,23 @@ namespace _2D_ADVENTURE_GAME
         {
             // Calling movehero
             MoveHero(direction);
+
+
+            if (MoveHero(direction))
+            {
+                
+                heroMove++;
+
+                
+                if (heroMove >= 2) 
+                {
+                    
+                    heroMove = 0;
+                    MoveEnemies(); //m ethod called when hero has 2 succesful moves
+                }
+            }
+
+
         }
         public enum GameState // state of game
         {
@@ -90,9 +107,36 @@ namespace _2D_ADVENTURE_GAME
             TempHero = Level.Hero;
             Random rand = new Random(); //randomise
       
-            Level = new Level(rand.Next(MIN_SIZE, MAX_SIZE + 1), rand.Next(MIN_SIZE, MAX_SIZE + 1),4, TempHero); 
+            Level = new Level(rand.Next(MIN_SIZE, MAX_SIZE + 1), rand.Next(MIN_SIZE, MAX_SIZE + 1),currentLevelNumber, TempHero); 
 
            
         }
+        private void MoveEnemies() //method with conditions for enemy movement
+        {
+
+            for (int i = 0; i < Level.enemyTiles.Length; i++)
+            { 
+
+                EnemyTile enemy = Level.enemyTiles[i];
+
+                if (enemy != null ) //if enemy is dead it skips
+                {
+                    Tile targetTile;
+
+                   
+                    if (enemy.GetMove(out targetTile) && targetTile != null)
+                    {
+                        if (targetTile is EmptyTile || targetTile is HeroTile)
+                        {
+                            Level.SwopTiles(enemy, targetTile); //swop tile method called when the enemy has a move
+
+                            Level.UpdateVision();
+                        }
+                    }
+                }
+            }
+
+        }
     }
+    
 }

@@ -17,10 +17,12 @@ namespace _2D_ADVENTURE_GAME
         //paralled or 2D array
         Tile[,] TileArray;
 
-        private EnemyTile[] enemyTiles;
+        public EnemyTile[] enemyTiles;
 
-        public  EnemyTile EnemyTile { get;}
-
+        public EnemyTile[] EnemyTiles //property to expose array
+        {
+            get { return enemyTiles; }
+        }
 
         //Properties to expose field values
         public int HeiGht
@@ -70,9 +72,13 @@ namespace _2D_ADVENTURE_GAME
             ArrayTile[exit.X, exit.Y] = CreateTile(TileType.Exit, exit);
 
             enemyTiles = new EnemyTile[NumOfSpawn];
-            Position enemy = GetRandomEmptyPosition();
-       
-            ArrayTile[enemy.X, enemy.Y] = CreateTile(TileType.Enemy, enemy);
+
+            for (int i = 0; i < NumOfSpawn; i++)
+            {
+                Position enemyPos = GetRandomEmptyPosition();
+                enemyTiles[i] = CreateTile(TileType.Enemy, enemyPos) as EnemyTile;
+                TileArray[enemyPos.X, enemyPos.Y] = enemyTiles[i];
+            }
 
         }
 
@@ -230,7 +236,13 @@ namespace _2D_ADVENTURE_GAME
         public void UpdateVision()
         {
             Hero.UpdateVision(this);
-            EnemyTile.UpdateVision(this);
+            for (int i = 0; i < enemyTiles.Length; i++) //update vision for each enemy in the enemy tile array
+            {
+                if (enemyTiles[i] != null)
+                {
+                    enemyTiles[i].UpdateVision(this);
+                }
+            }
         }
     }
 }
